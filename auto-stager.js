@@ -175,7 +175,7 @@ async function createPanel() {
       <ActivityType>Custom</ActivityType>
       ${order}
       <Page>
-        <Name>Auto Stager 🙌</Name>
+        <Name>${button.name}</Name>
         <Row>
           <Name>Row</Name>
           <Widget>
