@@ -183,7 +183,7 @@ async function createPanel() {
             <WidgetId>${panelId}-handraise-text</WidgetId>
             <Name>${handRaiseText}</Name>
             <Type>Text</Type>
-            <Options>size=3;fontSize=normal;align=center</Options>
+            <Options>size=3;fontSize=normal;align=left</Options>
           </Widget>
           <Widget>
             <WidgetId>${panelId}-handRaise</WidgetId>
@@ -197,7 +197,7 @@ async function createPanel() {
             <WidgetId>w${panelId}-activeSpeaker-text</WidgetId>
             <Name>${activeSpeaker}</Name>
             <Type>Text</Type>
-            <Options>size=3;fontSize=normal;align=center</Options>
+            <Options>size=3;fontSize=normal;align=left</Options>
           </Widget>
           <Widget>
             <WidgetId>${panelId}-activeSpeaker</WidgetId>
