@@ -39,7 +39,7 @@ const config = {
     icon: 'Sliders'
   },
   panelText: {
-    handRaise: 'Auto move raised hands to stage',
+    handRaise: 'Show raised hands participant on stage',
     activeSpeaker: 'Show active speaker on stage'
   },
   panelId: 'autostager'
