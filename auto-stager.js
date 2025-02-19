@@ -35,14 +35,14 @@ import xapi from 'xapi';
 
 const config = {
   button: {
-    name: 'Auto Stager 🙌',
-    icon: 'Sliders'
+    name: 'Auto Stager 🙌',   // Name of the Button and Panel Page
+    icon: 'Sliders'           // One of the supported native icons name
   },
-  panelText: {
+  panelText: {              // Raise Hand and Active Speaker Text
     handRaise: 'Show raised hands participant on stage',
     activeSpeaker: 'Show active speaker on stage'
   },
-  panelId: 'autostager'
+  panelId: 'autostager'     // PanelId is used for the base panel and widget Ids
 }
 
 /*********************************************************
@@ -170,9 +170,8 @@ async function createPanel() {
   <Extensions>
     <Panel>
       <Location>CallControls</Location>
-      <Icon>Helpdesk</Icon>
+      <Icon>${button.icon}</Icon>
       <Name>${button.name}</Name>
-      <Color>${button.color}</Color>
       <ActivityType>Custom</ActivityType>
       ${order}
       <Page>
