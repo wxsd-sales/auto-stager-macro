@@ -2,7 +2,7 @@
 
 This is an example macro which demonstrates how to automatically move participants in a Webex Meeting to the stage on a Cisco Collaboration Device
 
-![Controller Screenshot](images/auto-stager-screenshot.png)
+![OSD Screenshot](images/auto-stager-osd.png)
 
 
 ## Overview
@@ -13,7 +13,9 @@ When a meeting participant raises or lowers their hand the macro will automatica
 
 The macro also lets you ensure the Active Speaker is always visible when raised hand participants have been moved to stage.
 
-Lastly, the macro saves an in-call UI Extension panel to provide controls for toggling on or off this macro .
+Lastly, the macro saves an in-call UI Extension panel to provide controls for toggling on or off this macro.
+
+![Controller Screenshot](images/auto-stager-screenshot.png)
 
 ## Setup
 
