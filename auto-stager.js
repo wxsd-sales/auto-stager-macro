@@ -75,14 +75,15 @@ async function init() {
 }
 
 
-async function processParticipantUpdates({ HandRaised, ParticipantId }) {
+async function processParticipantUpdates({ HandRaised, ParticipantId, DisplayName }) {
   if (!mode.handRaise) return
   console.log('Participant State updated')
   const stageParticipants = await getStageParticipantsIds();
 
   // Add new hand raise to stage
   if (HandRaised == 'True' && !stageParticipants.includes(ParticipantId)) {
-    console.log('Hand Raised, adding to stage')
+    console.log(DisplayName, 'Hand Raised, adding to stage')
+    alert(DisplayName + ' Hand Raised ✋<br>Adding To Stage')
     setStageParticipants(stageParticipants.concat(ParticipantId))
     return
   }
@@ -90,6 +91,7 @@ async function processParticipantUpdates({ HandRaised, ParticipantId }) {
   // Remove lowered hand raise from stage
   if (HandRaised == 'False' && stageParticipants.includes(ParticipantId)) {
     console.log('Hand Lowered, removing from stage')
+    alert(DisplayName + ' Hand Lowered<br>Removing From Stage')
     const index = stageParticipants.indexOf(ParticipantId);
     stageParticipants.splice(index, 1);
     setStageParticipants(stageParticipants)
@@ -98,16 +100,16 @@ async function processParticipantUpdates({ HandRaised, ParticipantId }) {
   console.log('No Action Taken')
 }
 
-async function processWidgetAction({ Type, Value, WidgetId }){
+async function processWidgetAction({ Type, Value, WidgetId }) {
   if (!WidgetId.startsWith(config.panelId)) return
   if (Type != 'changed') return
   const [_panelId, action] = WidgetId.split('-')
   mode[action] = Value == 'on';
-  console.log('Auto Stager - HandRaise:', mode.handRaise ? 'Enabled' : 'Disabled', '- ActiveSpeaker:', mode.handRaise ? 'Enabled': 'Disabled')
+  console.log('Auto Stager - HandRaise:', mode.handRaise ? 'Enabled' : 'Disabled', '- ActiveSpeaker:', mode.handRaise ? 'Enabled' : 'Disabled')
   performFullCheck();
 }
 
-async function performFullCheck(){
+async function performFullCheck() {
   console.log('Performing full raised hands to stage check')
   if (!mode.handRaise) return setStageParticipants()
   const participants = await getRaidedHands();
@@ -117,7 +119,7 @@ async function performFullCheck(){
 
 function setStageParticipants(ids = []) {
   if (ids.length > 0) {
-    if(mode.activeSpeaker){
+    if (mode.activeSpeaker) {
       console.log('Setting', ids.length, 'participants to stage with Active Speaker');
       xapi.Command.Video.Layout.StageParticipants.Set.ById({ ActiveSpeakerIndex: 0, ParticipantId: ids.slice(0, 8) });
     } else {
@@ -132,13 +134,13 @@ function setStageParticipants(ids = []) {
 
 async function getRaidedHands() {
   console.log('Getting Current Raised Hands')
-  try{
-  const result = await xapi.Command.Conference.ParticipantList.Search();
-  const participants = result?.Participant;
-  if (!participants) return
-  const raisedHands = participants.filter(participant => participant.HandRaised == "True")
-  return raisedHands.map(participant => participant.ParticipantId)
-  } catch (e){
+  try {
+    const result = await xapi.Command.Conference.ParticipantList.Search();
+    const participants = result?.Participant;
+    if (!participants) return
+    const raisedHands = participants.filter(participant => participant.HandRaised == "True")
+    return raisedHands.map(participant => participant.ParticipantId)
+  } catch (e) {
     return
   }
 }
@@ -149,7 +151,10 @@ async function getStageParticipantsIds() {
   return result.map(participant => participant.ParticipantId)
 }
 
-
+function alert(Text, Duration = 10) {
+  xapi.Command.UserInterface.Message.Alert.Display(
+    { Duration, Text, Title: config.button.name });
+}
 
 async function getWidgetValue(widgetId) {
   const widgets = await xapi.Status.UserInterface.Extensions.Widget.get()
@@ -216,11 +221,11 @@ async function createPanel() {
  * Gets the current Panel Order if exiting Macro panel is present
  * to preserve the order in relation to other custom UI Extensions
  **********************************************************/
-async function panelOrder(panelId) {
+async function panelOrder(panelId, preferred) {
   const list = await xapi.Command.UserInterface.Extensions.List({ ActivityType: "Custom" });
   const panels = list?.Extensions?.Panel
-  if (!panels) return ''
+  if (!panels) return `<Order>${preferred}</Order>`
   const existingPanel = panels.find(panel => panel.PanelId == panelId)
-  if (!existingPanel) return ''
+  if (!existingPanel) return `<Order>${preferred}</Order>`
   return `<Order>${existingPanel.Order}</Order>`
 }
